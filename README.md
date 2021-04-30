@@ -20,4 +20,6 @@ py.test -v
 
 ### To modify test data
 
-Edit the `testdata` list within [`test_sort_filter.py`](test_sort_filter.py)
+Edit the `testdata` list within [`test_sort_filter.py`](test_sort_filter.py).
+(The current data includes some intentionally invalid input which the test
+framework will reject and skip the tests.)

@@ -15,9 +15,9 @@ def load_app_data(request):
     '''
     This is a pytest fixture to initiate the browser, load app url,
     retrieve table data and close the driver at the end of every test
-    :param request: to store and retrieve values across tests
-    :return: driver: webdriver handle
-    :return: master_data: The table data on the url
+    :param request: To store and retrieve values across tests. This sets the
+        webdriver and also retrieves and stores the master data of all records
+        in the table.
     '''
     driver = webdriver.Chrome(ChromeDriverManager().install())
     driver.get(TestConfig.app_url)
@@ -29,8 +29,8 @@ def load_app_data(request):
 
 def get_table_value(driver):
     '''
-    This function retrieves all the table rows and the data within them
-    and build a master table which is used for comparision later
+    This function retrieves all the table row data and builds a master table
+    which is used for comparision later
     :param driver: webdriver handle
     :return: master_data: table with all original values before sorting or filtering
     '''
@@ -66,10 +66,10 @@ def get_table_value(driver):
 
 def filter_by_value(l, val):
     '''
-    This function returns a sorted list after filtering with val
-    :param l: list to be filtered
-    :param val: value or string to filter
-    :return: list of list with filtered value
+    This function returns a sorted table after filtering with val
+    :param l: table (list of lists) to be filtered
+    :param val: string to use as filter
+    :return: filtered table (list of lists matching filter)
     '''
     val = val.lower()
     return list(filter(lambda x: val in x[0] or val in x[-1], l))
@@ -77,10 +77,11 @@ def filter_by_value(l, val):
 
 def sort_by_field(l, field="name"):
     '''
-    This function returns a sorted list after sorting the data in original list with filed value
-    :param l: list to be sorted
-    :param field: filed to be sorted by
-    :return: sorted list by field value
+    This function returns a sorted table after sorting the data in original table
+        using the provided field
+    :param l: table (list of lists) to be sorted
+    :param field: field to be sorted by
+    :return: sorted table (list of lists sorted by field)
     '''
     if field is None:
         return l
@@ -92,11 +93,11 @@ def sort_by_field(l, field="name"):
 
 def sort_and_filter(l,filter_text,sort_val):
     '''
-    this function performs filter and sorting in conjunction
+    This function performs filter and sorting in conjunction
     :param l: list to be sorted and filtered
-    :param filter_text: string passed as a filter input
-    :param sort_val: sort order
-    :return: list sorted with sort_val and filterd with filter_text
+    :param filter_text: string to use as filter
+    :param sort_val: field to be sorted by
+    :return: sorted and filtered table (list of lists)
     '''
     filter_list = filter_by_value(l, filter_text)
     return sort_by_field(filter_list,sort_val)
@@ -107,10 +108,10 @@ def equiv(l1, l2, key):
     Check if two tables are equivalent given a column that is sorted.
     The function validates the sorting using the column next to the one being sorted.
     It assumes no order in the additional column being validated.
-    :param l1: list1 of lists
-    :param l2: list2 of lists
-    :param key: key to sort list1 and list2
-    :return: True if both lists are same else false
+    :param l1: table1 (list of lists)
+    :param l2: table2 (list of lists)
+    :param key: key to sort both tables with
+    :return: True if both lists are same, else False
     '''
     # Sets to store values from the additional column used for validation
     d1 = set()
